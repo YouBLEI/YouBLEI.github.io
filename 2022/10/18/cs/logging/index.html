@@ -1,0 +1,1730 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="logging, Kaka">
+    <meta name="description" content="[TOC]
+本文摘自于博客，仅供自己学习使用
+程序的日志包括等级
+debug
+info
+notice
+warning
+error
+critical
+alert
+emergency
+
+日志字段信息与日志格式
+事件发生时间
+事件发生位置
+事件发">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>logging | Kaka</title>
+    <link rel="icon" type="image/jpeg" href="/medias/logo.jpg">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Kaka</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Kaka</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">logging</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9B%B8%E5%85%B3/" class="post-category">
+                                计算机相关
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-10-18
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>[TOC]</p>
+<p>本文摘自于<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yyds/p/6901864.html">博客</a>，仅供自己学习使用</p>
+<h5 id="程序的日志包括等级"><a href="#程序的日志包括等级" class="headerlink" title="程序的日志包括等级"></a>程序的日志包括等级</h5><ul>
+<li>debug</li>
+<li>info</li>
+<li>notice</li>
+<li>warning</li>
+<li>error</li>
+<li>critical</li>
+<li>alert</li>
+<li>emergency</li>
+</ul>
+<h5 id="日志字段信息与日志格式"><a href="#日志字段信息与日志格式" class="headerlink" title="日志字段信息与日志格式"></a>日志字段信息与日志格式</h5><ul>
+<li>事件发生时间</li>
+<li>事件发生位置</li>
+<li>事件发生的严重程度</li>
+<li>事件的内容</li>
+</ul>
+<h4 id="logging-详细介绍"><a href="#logging-详细介绍" class="headerlink" title="logging 详细介绍"></a>logging 详细介绍</h4><h5 id="logging-模块的日志级别"><a href="#logging-模块的日志级别" class="headerlink" title="logging 模块的日志级别"></a>logging 模块的日志级别</h5><p>默认定义的几个日志等级，允许开发人员自定义其他日志等级</p>
+<table>
+<thead>
+<tr>
+<th>日志等级（level）</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DEBUG</td>
+<td>最详细的日志信息，典型应用场景是 问题诊断</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>信息详细程度仅次于DEBUG，通常只记录关键节点信息，用于确认一切都是按照我们预期的那样进行工作</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>当某些不期望的事情发生时记录的信息（如，磁盘可用空间较低），但是此时应用程序还是正常运行的</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>由于一个更严重的问题导致某些功能不能正常运行时记录的信息</td>
+</tr>
+<tr>
+<td>CRITICAL</td>
+<td>当发生严重错误，导致应用程序不能继续运行时记录的信息</td>
+</tr>
+</tbody></table>
+<p>开发应用程序或部署开发环境时，可以使用DEBUG或INFO级别的日志获取尽可能详细的日志信息来进行开发或部署调试；应用上线或部署生产环境时，应该使用WARNING或ERROR或CRITICAL级别的日志来降低机器的I&#x2F;O压力和提高获取错误日志信息的效率。日志级别的指定通常都是在应用程序的配置文件中进行指定的。</p>
+<blockquote>
+<ul>
+<li>上面列表中的日志等级是从上到下依次升高的，即：DEBUG &lt; INFO &lt; WARNING &lt; ERROR &lt; CRITICAL，而日志的信息量是依次减少的；</li>
+<li>当为某个应用程序指定一个日志级别后，应用程序会记录所有日志级别大于或等于指定日志级别的日志信息，而不是仅仅记录指定级别的日志信息，nginx、php等应用程序以及这里要提高的python的logging模块都是这样的。同样，logging模块也可以指定日志记录器的日志级别，只有级别大于或等于该指定日志级别的日志记录才会被输出，小于该等级的日志记录将会被丢弃。</li>
+</ul>
+</blockquote>
+<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>logging模块提供了两种记录日志的方式：</p>
+<ul>
+<li>第一种方式是使用logging提供的模块级别的函数</li>
+<li>第二种方式是使用Logging日志系统的四大组件</li>
+</ul>
+<p><strong>logging模块定义的模块级别的常用函数</strong></p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>logging.debug(msg, *args, **kwargs)</td>
+<td>创建一条严重级别为DEBUG的日志记录</td>
+</tr>
+<tr>
+<td>logging.info(msg, *args, **kwargs)</td>
+<td>创建一条严重级别为INFO的日志记录</td>
+</tr>
+<tr>
+<td>logging.warning(msg, *args, **kwargs)</td>
+<td>创建一条严重级别为WARNING的日志记录</td>
+</tr>
+<tr>
+<td>logging.error(msg, *args, **kwargs)</td>
+<td>创建一条严重级别为ERROR的日志记录</td>
+</tr>
+<tr>
+<td>logging.critical(msg, *args, **kwargs)</td>
+<td>创建一条严重级别为CRITICAL的日志记录</td>
+</tr>
+<tr>
+<td>logging.log(level, *args, **kwargs)</td>
+<td>创建一条严重级别为level的日志记录</td>
+</tr>
+<tr>
+<td>logging.basicConfig(**kwargs)</td>
+<td>对root logger进行一次性配置</td>
+</tr>
+</tbody></table>
+<p>其中<code>logging.basicConfig(**kwargs)</code>函数用于指定“要记录的日志级别”、“日志格式”、“日志输出位置”、“日志文件的打开模式”等信息，其他几个都是用于记录各个级别日志的函数。</p>
+<p><strong>logging模块的四大组件</strong></p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>loggers</td>
+<td>提供应用程序代码直接使用的接口</td>
+</tr>
+<tr>
+<td>handlers</td>
+<td>用于将日志记录发送到指定的目的位置</td>
+</tr>
+<tr>
+<td>filters</td>
+<td>提供更细粒度的日志过滤功能，用于决定哪些日志记录将会被输出（其它的日志记录将会被忽略）</td>
+</tr>
+<tr>
+<td>formatters</td>
+<td>用于控制日志信息的最终输出格式</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><em><strong>说明：</strong></em> logging模块提供的模块级别的那些函数实际上也是通过这几个组件的相关实现类来记录日志的，只是在创建这些类的实例时设置了一些默认值</p>
+</blockquote>
+<h4 id="详细例子"><a href="#详细例子" class="headerlink" title="详细例子"></a>详细例子</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> logging
+
+logging<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">"This is a debug log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is a info log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">"This is a warning log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is a error log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>critical<span class="token punctuation">(</span><span class="token string">"This is a critical log."</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>或者</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">logging<span class="token punctuation">.</span>log<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">,</span> <span class="token string">"This is a debug log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>log<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>INFO<span class="token punctuation">,</span> <span class="token string">"This is a info log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>log<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>WARNING<span class="token punctuation">,</span> <span class="token string">"This is a warning log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>log<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>ERROR<span class="token punctuation">,</span> <span class="token string">"This is a error log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>log<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>CRITICAL<span class="token punctuation">,</span> <span class="token string">"This is a critical log."</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>输出只有后面三条</p>
+<blockquote>
+<p>WARNING:root:This is a warning log.<br>ERROR:root:This is a error log.<br>CRITICAL:root:This is a critical log.</p>
+</blockquote>
+<p>注明：</p>
+<ol>
+<li><p>因为日志级别是<code>warning</code> 只有级别大于等于warning的才会被输出，小于的被丢弃</p>
+</li>
+<li><p>输出字段表示：日志级别：日志器名称：日志内容</p>
+</li>
+<li><p>这么输出是因为logging 提供的日志记录函数中默认的格式是BASIC_FORMAT,其值为</p>
+</li>
+</ol>
+<blockquote>
+<p>“%(levelname)s:%(name)s:%(message)s”</p>
+</blockquote>
+<ol start="4">
+<li>在logging 模块中提供的日志记录的日志器设置所指定的日志输出位置为 <code>sys.stderr</code></li>
+<li>这些配置都会调用 logging.basicConfig(**kwargs), 想要修改这些配置，需要手动调用一下basicconfig方法，将想要设置的内容以参数的形式传递进去</li>
+</ol>
+<h5 id="logging-basiconfig-基本配置函数"><a href="#logging-basiconfig-基本配置函数" class="headerlink" title="logging.basiconfig() 基本配置函数"></a>logging.basiconfig() 基本配置函数</h5><table>
+<thead>
+<tr>
+<th>filename</th>
+<th>指定日志输出目标文件的文件名，指定该设置项后日志信心就不会被输出到控制台了</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>filemode</td>
+<td>指定日志文件的打开模式，默认为’a’。需要注意的是，该选项要在filename指定时才有效</td>
+</tr>
+<tr>
+<td>format</td>
+<td>指定日志格式字符串，即指定日志输出时所包含的字段信息以及它们的顺序。logging模块定义的格式字段下面会列出。</td>
+</tr>
+<tr>
+<td>datefmt</td>
+<td>指定日期&#x2F;时间格式。需要注意的是，该选项要在format中包含时间字段%(asctime)s时才有效</td>
+</tr>
+<tr>
+<td>level</td>
+<td>指定日志器的日志级别</td>
+</tr>
+<tr>
+<td>stream</td>
+<td>指定日志输出目标stream，如sys.stdout、sys.stderr以及网络stream。需要说明的是，stream和filename不能同时提供，否则会引发 <code>ValueError</code>异常</td>
+</tr>
+<tr>
+<td>style</td>
+<td>Python 3.2中新添加的配置项。指定format格式字符串的风格，可取值为’%’、’{‘和’$’，默认为’%’</td>
+</tr>
+<tr>
+<td>handlers</td>
+<td>Python 3.3中新添加的配置项。该选项如果被指定，它应该是一个创建了多个Handler的可迭代对象，这些handler将会被添加到root logger。需要说明的是：filename、stream和handlers这三个配置项只能有一个存在，不能同时出现2个或3个，否则会引发ValueError异常。</td>
+</tr>
+</tbody></table>
+<h5 id="logging-模块定义的格式字符串段"><a href="#logging-模块定义的格式字符串段" class="headerlink" title="logging 模块定义的格式字符串段"></a>logging 模块定义的格式字符串段</h5><table>
+<thead>
+<tr>
+<th>字段&#x2F;属性名称</th>
+<th>使用格式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>asctime</td>
+<td>%(asctime)s</td>
+<td>日志事件发生的时间–人类可读时间，如：2003-07-08 16:49:45,896</td>
+</tr>
+<tr>
+<td>created</td>
+<td>%(created)f</td>
+<td>日志事件发生的时间–时间戳，就是当时调用time.time()函数返回的值</td>
+</tr>
+<tr>
+<td>relativeCreated</td>
+<td>%(relativeCreated)d</td>
+<td>日志事件发生的时间相对于logging模块加载时间的相对毫秒数（目前还不知道干嘛用的）</td>
+</tr>
+<tr>
+<td>msecs</td>
+<td>%(msecs)d</td>
+<td>日志事件发生事件的毫秒部分</td>
+</tr>
+<tr>
+<td>levelname</td>
+<td>%(levelname)s</td>
+<td>该日志记录的文字形式的日志级别（’DEBUG’, ‘INFO’, ‘WARNING’, ‘ERROR’, ‘CRITICAL’）</td>
+</tr>
+<tr>
+<td>levelno</td>
+<td>%(levelno)s</td>
+<td>该日志记录的数字形式的日志级别（10, 20, 30, 40, 50）</td>
+</tr>
+<tr>
+<td>name</td>
+<td>%(name)s</td>
+<td>所使用的日志器名称，默认是’root’，因为默认使用的是 rootLogger</td>
+</tr>
+<tr>
+<td>message</td>
+<td>%(message)s</td>
+<td>日志记录的文本内容，通过 <code>msg % args</code>计算得到的</td>
+</tr>
+<tr>
+<td>pathname</td>
+<td>%(pathname)s</td>
+<td>调用日志记录函数的源码文件的全路径</td>
+</tr>
+<tr>
+<td>filename</td>
+<td>%(filename)s</td>
+<td>pathname的文件名部分，包含文件后缀</td>
+</tr>
+<tr>
+<td>module</td>
+<td>%(module)s</td>
+<td>filename的名称部分，不包含后缀</td>
+</tr>
+<tr>
+<td>lineno</td>
+<td>%(lineno)d</td>
+<td>调用日志记录函数的源代码所在的行号</td>
+</tr>
+<tr>
+<td>funcName</td>
+<td>%(funcName)s</td>
+<td>调用日志记录函数的函数名</td>
+</tr>
+<tr>
+<td>process</td>
+<td>%(process)d</td>
+<td>进程ID</td>
+</tr>
+<tr>
+<td>processName</td>
+<td>%(processName)s</td>
+<td>进程名称，Python 3.1新增</td>
+</tr>
+<tr>
+<td>thread</td>
+<td>%(thread)d</td>
+<td>线程ID</td>
+</tr>
+<tr>
+<td>threadName</td>
+<td>%(thread)s</td>
+<td>线程名称</td>
+</tr>
+</tbody></table>
+<h5 id="同时输出到文件和日志"><a href="#同时输出到文件和日志" class="headerlink" title="同时输出到文件和日志"></a>同时输出到文件和日志</h5><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> logging
+
+logger <span class="token operator">=</span> logging<span class="token punctuation">.</span>getLogger<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">'r'</span><span class="token punctuation">)</span>  <span class="token comment"># 不加名称设置root logger</span>
+logger<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">)</span>
+formatter <span class="token operator">=</span> logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span>
+    <span class="token string">'%(asctime)s - %(name)s - %(levelname)s: - %(message)s'</span><span class="token punctuation">,</span>
+    datefmt<span class="token operator">=</span><span class="token string">'%Y-%m-%d %H:%M:%S'</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 使用FileHandler输出到文件</span>
+fh <span class="token operator">=</span> logging<span class="token punctuation">.</span>FileHandler<span class="token punctuation">(</span><span class="token string">'log.txt'</span><span class="token punctuation">)</span>
+fh<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">)</span>
+fh<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>formatter<span class="token punctuation">)</span>
+
+<span class="token comment"># 使用StreamHandler输出到屏幕</span>
+ch <span class="token operator">=</span> logging<span class="token punctuation">.</span>StreamHandler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>formatter<span class="token punctuation">)</span>
+
+<span class="token comment"># 添加两个Handler</span>
+logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>ch<span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>fh<span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'this is info message'</span><span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">'this is warn message'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h5><ul>
+<li>基本配置</li>
+</ul>
+<blockquote>
+<p>logging.basicConfig(level&#x3D;logging.DEBUG) 配置级别</p>
+</blockquote>
+<ul>
+<li>设置输出日志</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">LOG_FORMAT <span class="token operator">=</span> <span class="token string">"%(asctime)s - %(levelname)s - %(message)s"</span>
+logging<span class="token punctuation">.</span>basicConfig<span class="token punctuation">(</span>filename<span class="token operator">=</span><span class="token string">'my.log'</span><span class="token punctuation">,</span> level<span class="token operator">=</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">,</span> <span class="token builtin">format</span><span class="token operator">=</span>LOG_FORMAT<span class="token punctuation">)</span>
+
+logging<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">"This is a debug log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is a info log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">"This is a warning log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is a error log."</span><span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>critical<span class="token punctuation">(</span><span class="token string">"This is a critical log."</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>设置日期时间格式</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">LOG_FORMAT <span class="token operator">=</span> <span class="token string">"%(asctime)s - %(levelname)s - %(message)s"</span>
+DATE_FORMAT <span class="token operator">=</span> <span class="token string">"%m/%d/%Y %H:%M:%S %p"</span>
+
+logging<span class="token punctuation">.</span>basicConfig<span class="token punctuation">(</span>filename<span class="token operator">=</span><span class="token string">'my.log'</span><span class="token punctuation">,</span> level<span class="token operator">=</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">,</span> <span class="token builtin">format</span><span class="token operator">=</span>LOG_FORMAT<span class="token punctuation">,</span> datefmt<span class="token operator">=</span>DATE_FORMAT<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li><p><code>logging.basicConfig()</code>函数是一个一次性的简单配置工具使，也就是说只有在第一次调用该函数时会起作用，后续再次调用该函数时完全不会产生任何操作的，多次调用的设置并不是累加操作</p>
+</li>
+<li><p>可使用一个格式字符串作为这个事件的描述消息（logging.debug、logging.info等函数的第一个参数），然后将变量数据作为第二个参数*args的值进行传递，如:<code>logging.warning(&#39;%s is %d years old.&#39;, &#39;Tom&#39;, 10)</code>，输出内容为<code>WARNING:root:Tom is 10 years old.</code></p>
+</li>
+<li><p>logging.debug(), logging.info()等方法的定义中，除了msg和args参数外，还有一个**kwargs参数。它们支持3个关键字参数: <code>exc_info, stack_info, extra</code>，</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">LOG_FORMAT <span class="token operator">=</span> <span class="token string">"%(asctime)s - %(levelname)s - %(user)s[%(ip)s] - %(message)s"</span>
+DATE_FORMAT <span class="token operator">=</span> <span class="token string">"%m/%d/%Y %H:%M:%S %p"</span>
+
+logging<span class="token punctuation">.</span>basicConfig<span class="token punctuation">(</span><span class="token builtin">format</span><span class="token operator">=</span>LOG_FORMAT<span class="token punctuation">,</span> datefmt<span class="token operator">=</span>DATE_FORMAT<span class="token punctuation">)</span>
+logging<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">"Some one delete the log file."</span><span class="token punctuation">,</span> exc_info<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> stack_info<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> extra<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token string">'user'</span><span class="token punctuation">:</span> <span class="token string">'Tom'</span><span class="token punctuation">,</span> <span class="token string">'ip'</span><span class="token punctuation">:</span><span class="token string">'47.98.53.222'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>输出结果将会</p>
+<blockquote>
+<p>05&#x2F;08&#x2F;2017 16:35:00 PM - WARNING - Tom[47.98.53.222] - Some one delete the log file.</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="logging模块日志流处理流程"><a href="#logging模块日志流处理流程" class="headerlink" title="logging模块日志流处理流程"></a>logging模块日志流处理流程</h4><h5 id="logging日志模块四大组件"><a href="#logging日志模块四大组件" class="headerlink" title="logging日志模块四大组件"></a>logging日志模块四大组件</h5><table>
+<thead>
+<tr>
+<th>组件名称</th>
+<th>对应类名</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>日志器</td>
+<td>Logger</td>
+<td>提供了应用程序可一直使用的接口</td>
+</tr>
+<tr>
+<td>处理器</td>
+<td>Handler</td>
+<td>将logger创建的日志记录发送到合适的目的输出</td>
+</tr>
+<tr>
+<td>过滤器</td>
+<td>Filter</td>
+<td>提供了更细粒度的控制工具来决定输出哪条日志记录，丢弃哪条日志记录</td>
+</tr>
+<tr>
+<td>格式器</td>
+<td>Formatter</td>
+<td>决定日志记录的最终输出格式</td>
+</tr>
+</tbody></table>
+<ul>
+<li>日志器（logger）需要通过处理器（handler）将日志信息输出到目标位置，如：文件、sys.stdout、网络等；</li>
+<li>不同的处理器（handler）可以将日志输出到不同的位置；</li>
+<li>日志器（logger）可以设置多个处理器（handler）将同一条日志记录输出到不同的位置；</li>
+<li>每个处理器（handler）都可以设置自己的过滤器（filter）实现日志过滤，从而只保留感兴趣的日志；</li>
+<li>每个处理器（handler）都可以设置自己的格式器（formatter）实现同一条日志以不同的格式输出到不同的地方。</li>
+</ul>
+<p>日志器（logger）是入口，真正干活儿的是处理器（handler），处理器（handler）还可以通过过滤器（filter）和格式器（formatter）对要输出的日志内容做过滤和格式化等处理操作</p>
+<h5 id="常用使用介绍"><a href="#常用使用介绍" class="headerlink" title="常用使用介绍"></a>常用使用介绍</h5><p>Logger, Handler, Filter, Formatter。</p>
+<h6 id="Logger"><a href="#Logger" class="headerlink" title="Logger"></a>Logger</h6><p>对象有3个任务要做：</p>
+<ul>
+<li>1）向应用程序代码暴露几个方法，使应用程序可以在运行时记录日志消息；</li>
+<li>2）基于日志严重等级（默认的过滤设施）或filter对象来决定要对哪些日志进行后续处理；</li>
+<li>3）将日志消息传送给所有感兴趣的日志handlers。</li>
+</ul>
+<p>Logger对象最常用的方法分为两类：配置方法 和 消息发送方法</p>
+<p>最常用的配置方法如下：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Logger.setLevel()</td>
+<td>设置日志器将会处理的日志消息的最低严重级别</td>
+</tr>
+<tr>
+<td>Logger.addHandler() 和 Logger.removeHandler()</td>
+<td>为该logger对象添加 和 移除一个handler对象</td>
+</tr>
+<tr>
+<td>Logger.addFilter() 和 Logger.removeFilter()</td>
+<td>为该logger对象添加 和 移除一个filter对象</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><em><strong>关于Logger.setLevel()方法的说明：</strong></em></p>
+<p>内建等级中，级别最低的是DEBUG，级别最高的是CRITICAL。例如setLevel(logging.INFO)，此时函数参数为INFO，那么该logger将只会处理INFO、WARNING、ERROR和CRITICAL级别的日志，而DEBUG级别的消息将会被忽略&#x2F;丢弃</p>
+</blockquote>
+<p>logger对象配置完成后，可以使用下面的方法来创建日志记录：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Logger.debug(), Logger.info(), Logger.warning(), Logger.error(), Logger.critical()</td>
+<td>创建一个与它们的方法名对应等级的日志记录</td>
+</tr>
+<tr>
+<td>Logger.exception()</td>
+<td>创建一个类似于Logger.error()的日志消息</td>
+</tr>
+<tr>
+<td>Logger.log()</td>
+<td>需要获取一个明确的日志level参数来创建一个日志记录</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><em><strong>说明：</strong></em></p>
+<ul>
+<li>Logger.exception()与Logger.error()的区别在于：Logger.exception()将会输出堆栈追踪信息，另外通常只是在一个exception handler中调用该方法。</li>
+<li>Logger.log()与Logger.debug()、Logger.info()等方法相比，虽然需要多传一个level参数，显得不是那么方便，但是当需要记录自定义level的日志时还是需要该方法来完成。</li>
+</ul>
+</blockquote>
+<p>得到一个Logger对象:</p>
+<p>一种方式是通过Logger类的实例化方法创建一个Logger类的实例，</p>
+<p>但是我们通常都是用第二种方式  –logging.getLogger()方法。</p>
+<p>logging.getLogger()方法有一个可选参数name，该参数表示将要返回的日志器的名称标识，如果不提供该参数，则其值为’root’。若以相同的name参数值多次调用getLogger()方法，将会返回指向同一个logger对象的引用</p>
+<blockquote>
+<p><em><strong>关于logger的层级结构与有效等级的说明：</strong></em></p>
+<ul>
+<li>logger的名称是一个以’.’分割的层级结构，每个’.’后面的logger都是’.’前面的logger的children，例如，有一个名称为 foo 的logger，其它名称分别为 foo.bar, foo.bar.baz 和 foo.bam都是 foo 的后代。</li>
+<li>logger有一个”有效等级（effective level）”的概念。如果一个logger上没有被明确设置一个level，那么该logger就是使用它parent的level;如果它的parent也没有明确设置level则继续向上查找parent的parent的有效level，依次类推，直到找到个一个明确设置了level的祖先为止。需要说明的是，root logger总是会有一个明确的level设置（默认为 WARNING）。当决定是否去处理一个已发生的事件时，logger的有效等级将会被用来决定是否将该事件传递给该logger的handlers进行处理。</li>
+<li>child loggers在完成对日志消息的处理后，默认会将日志消息传递给与它们的祖先loggers相关的handlers。因此，我们不必为一个应用程序中所使用的所有loggers定义和配置handlers，只需要为一个顶层的logger配置handlers，然后按照需要创建child loggers就可足够了。我们也可以通过将一个logger的propagate属性设置为False来关闭这种传递机制。</li>
+</ul>
+</blockquote>
+<h6 id="Handler类"><a href="#Handler类" class="headerlink" title="Handler类"></a>Handler类</h6><p>Handler对象的作用是（基于日志消息的level）将消息分发到handler指定的位置（文件、网络、邮件等）。Logger对象可以通过addHandler()方法为自己添加0个或者更多个handler对象。比如，一个应用程序可能想要实现以下几个日志需求：</p>
+<ul>
+<li>1）把所有日志都发送到一个日志文件中；</li>
+<li>2）把所有严重级别大于等于error的日志发送到stdout（标准输出）；</li>
+<li>3）把所有严重级别为critical的日志发送到一个email邮件地址。<br>这种场景就需要3个不同的handlers，每个handler复杂发送一个特定严重级别的日志到一个特定的位置。</li>
+</ul>
+<p>一个handler中只有非常少数的方法是需要应用开发人员去关心的。对于使用内建handler对象的应用开发人员来说，似乎唯一相关的handler方法就是下面这几个配置方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Handler.setLevel()</td>
+<td>设置handler将会处理的日志消息的最低严重级别</td>
+</tr>
+<tr>
+<td>Handler.setFormatter()</td>
+<td>为handler设置一个格式器对象</td>
+</tr>
+<tr>
+<td>Handler.addFilter() 和 Handler.removeFilter()</td>
+<td>为handler添加 和 删除一个过滤器对象</td>
+</tr>
+</tbody></table>
+<p>应用程序代码不应该直接实例化和使用Handler实例。因为Handler是一个基类，它只定义了素有handlers都应该有的接口，同时提供了一些子类可以直接使用或覆盖的默认行为。下面是一些常用的Handler</p>
+<table>
+<thead>
+<tr>
+<th>Handler</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>logging.StreamHandler</td>
+<td>将日志消息发送到输出到Stream，如std.out, std.err或任何file-like对象。</td>
+</tr>
+<tr>
+<td>logging.FileHandler</td>
+<td>将日志消息发送到磁盘文件，默认情况下文件大小会无限增长</td>
+</tr>
+<tr>
+<td>logging.handlers.RotatingFileHandler</td>
+<td>将日志消息发送到磁盘文件，并支持日志文件按大小切割</td>
+</tr>
+<tr>
+<td>logging.hanlders.TimedRotatingFileHandler</td>
+<td>将日志消息发送到磁盘文件，并支持日志文件按时间切割</td>
+</tr>
+<tr>
+<td>logging.handlers.HTTPHandler</td>
+<td>将日志消息以GET或POST的方式发送给一个HTTP服务器</td>
+</tr>
+<tr>
+<td>logging.handlers.SMTPHandler</td>
+<td>将日志消息发送给一个指定的email地址</td>
+</tr>
+<tr>
+<td>logging.NullHandler</td>
+<td>该Handler实例会忽略error messages，通常被想使用logging的library开发者使用来避免’No handlers could be found for logger XXX’信息的出现。</td>
+</tr>
+</tbody></table>
+<h6 id="Formater类"><a href="#Formater类" class="headerlink" title="Formater类"></a>Formater类</h6><p>Formater对象用于配置日志信息的最终顺序、结构和内容。与logging.Handler基类不同的是，应用代码可以直接实例化Formatter类。另外，如果你的应用程序需要一些特殊的处理行为，也可以实现一个Formatter的子类来完成。</p>
+<blockquote>
+<p>logging.Formatter.<strong>init</strong>(fmt&#x3D;None, datefmt&#x3D;None, style&#x3D;’%’)</p>
+</blockquote>
+<p>可见，该构造方法接收3个可选参数：</p>
+<ul>
+<li>fmt：指定消息格式化字符串，如果不指定该参数则默认使用message的原始值</li>
+<li>datefmt：指定日期格式字符串，如果不指定该参数则默认使用”%Y-%m-%d %H:%M:%S”</li>
+<li>style：Python 3.2新增的参数，可取值为 ‘%’, ‘{‘和 ‘$’，如果不指定该参数则默认使用’%’</li>
+</ul>
+<h6 id="Filter类"><a href="#Filter类" class="headerlink" title="Filter类"></a>Filter类</h6><p>Filter可以被Handler和Logger用来做比level更细粒度的、更复杂的过滤功能。Filter是一个过滤器基类，它只允许某个logger层级下的日志事件通过过滤。该类定义如下</p>
+<blockquote>
+<p>class logging.Filter(name&#x3D;’’)<br>    filter(record)</p>
+</blockquote>
+<p>一个filter实例化时传递的name参数值为’A.B’，那么该filter实例将只允许名称为类似如下规则的loggers产生的日志记录通过过滤：’A.B’，’A.B,C’，’A.B.C.D’，’A.B.D’，而名称为’A.BB’, ‘B.A.B’的loggers产生的日志则会被过滤掉。如果name的值为空字符串，则允许所有的日志事件通过过滤</p>
+<p>filter方法用于具体控制传递的record记录是否能通过过滤，如果该方法返回值为0表示不能通过过滤，返回值为非0表示可以通过过滤</p>
+<blockquote>
+<p><em><strong>说明：</strong></em></p>
+<ul>
+<li>如果有需要，也可以在filter(record)方法内部改变该record，比如添加、删除或修改一些属性。</li>
+<li>我们还可以通过filter做一些统计工作，比如可以计算下被一个特殊的logger或handler所处理的record数量等。</li>
+</ul>
+</blockquote>
+<ul>
+<li>1）（在用户代码中进行）日志记录函数调用，如：logger.info(…)，logger.debug(…)等；</li>
+<li>2）判断要记录的日志级别是否满足日志器设置的级别要求（要记录的日志级别要大于或等于日志器设置的级别才算满足要求），如果不满足则该日志记录会被丢弃并终止后续的操作，如果满足则继续下一步操作；</li>
+<li>3）根据日志记录函数调用时掺入的参数，创建一个日志记录（LogRecord类）对象；</li>
+<li>4）判断日志记录器上设置的过滤器是否拒绝这条日志记录，如果日志记录器上的某个过滤器拒绝，则该日志记录会被丢弃并终止后续的操作，如果日志记录器上设置的过滤器不拒绝这条日志记录或者日志记录器上没有设置过滤器则继续下一步操作–将日志记录分别交给该日志器上添加的各个处理器；</li>
+<li>5）判断要记录的日志级别是否满足处理器设置的级别要求（要记录的日志级别要大于或等于该处理器设置的日志级别才算满足要求），如果不满足记录将会被该处理器丢弃并终止后续的操作，如果满足则继续下一步操作；</li>
+<li>6）判断该处理器上设置的过滤器是否拒绝这条日志记录，如果该处理器上的某个过滤器拒绝，则该日志记录会被当前处理器丢弃并终止后续的操作，如果当前处理器上设置的过滤器不拒绝这条日志记录或当前处理器上没有设置过滤器测继续下一步操作；</li>
+<li>7）如果能到这一步，说明这条日志记录经过了层层关卡允许被输出了，此时当前处理器会根据自身被设置的格式器（如果没有设置则使用默认格式）将这条日志记录进行格式化，最后将格式化后的结果输出到指定位置（文件、网络、类文件的Stream等）；</li>
+<li>8）如果日志器被设置了多个处理器的话，上面的第5-8步会执行多次；</li>
+<li>9）这里才是完整流程的最后一步：判断该日志器输出的日志消息是否需要传递给上一级logger（之前提到过，日志器是有层级关系的）的处理器，如果propagate属性值为1则表示日志消息将会被输出到处理器指定的位置，同时还会被传递给parent日志器的handlers进行处理直到当前日志器的propagate属性为0停止，如果propagate值为0则表示不向parent日志器的handlers传递该消息，到此结束。</li>
+</ul>
+<p>一条日志信息要想被最终输出需要依次经过以下几次过滤：</p>
+<ul>
+<li>日志器等级过滤；</li>
+<li>日志器的过滤器过滤；</li>
+<li>日志器的处理器等级过滤；</li>
+<li>日志器的处理器的过滤器过滤；</li>
+</ul>
+<h4 id="使用logging四大组件记录日志"><a href="#使用logging四大组件记录日志" class="headerlink" title="使用logging四大组件记录日志"></a>使用logging四大组件记录日志</h4><h5 id="1-需求"><a href="#1-需求" class="headerlink" title="1. 需求"></a>1. 需求</h5><p>现在有以下几个日志记录的需求：</p>
+<ul>
+<li>1）要求将所有级别的所有日志都写入磁盘文件中</li>
+<li>2）all.log文件中记录所有的日志信息，日志格式为：日期和时间 - 日志级别 - 日志信息</li>
+<li>3）error.log文件中单独记录error及以上级别的日志信息，日志格式为：日期和时间 - 日志级别 - 文件名[:行号] - 日志信息</li>
+<li>4）要求all.log在每天凌晨进行日志切割</li>
+</ul>
+<h5 id="2-分析"><a href="#2-分析" class="headerlink" title="2. 分析"></a>2. 分析</h5><ul>
+<li>1）要记录所有级别的日志，因此日志器的有效level需要设置为最低级别–DEBUG;</li>
+<li>2）日志需要被发送到两个不同的目的地，因此需要为日志器设置两个handler；另外，两个目的地都是磁盘文件，因此这两个handler都是与FileHandler相关的；</li>
+<li>3）all.log要求按照时间进行日志切割，因此他需要用logging.handlers.TimedRotatingFileHandler; 而error.log没有要求日志切割，因此可以使用FileHandler;</li>
+<li>4）两个日志文件的格式不同，因此需要对这两个handler分别设置格式器；</li>
+</ul>
+<h5 id="codes"><a href="#codes" class="headerlink" title="codes"></a>codes</h5><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> logging
+<span class="token keyword">import</span> logging<span class="token punctuation">.</span>handlers
+<span class="token keyword">import</span> datetime
+
+logger <span class="token operator">=</span> logging<span class="token punctuation">.</span>getLogger<span class="token punctuation">(</span><span class="token string">'mylogger'</span><span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">)</span>
+
+rf_handler <span class="token operator">=</span> logging<span class="token punctuation">.</span>handlers<span class="token punctuation">.</span>TimedRotatingFileHandler<span class="token punctuation">(</span><span class="token string">'all.log'</span><span class="token punctuation">,</span> when<span class="token operator">=</span><span class="token string">'midnight'</span><span class="token punctuation">,</span> interval<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> backupCount<span class="token operator">=</span><span class="token number">7</span><span class="token punctuation">,</span> atTime<span class="token operator">=</span>datetime<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置时间更新</span>
+rf_handler<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span><span class="token string">"%(asctime)s - %(levelname)s - %(message)s"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+f_handler <span class="token operator">=</span> logging<span class="token punctuation">.</span>FileHandler<span class="token punctuation">(</span><span class="token string">'error.log'</span><span class="token punctuation">)</span>
+f_handler<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>ERROR<span class="token punctuation">)</span>
+f_handler<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span><span class="token string">"%(asctime)s - %(levelname)s - %(filename)s[:%(lineno)d] - %(message)s"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>rf_handler<span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>f_handler<span class="token punctuation">)</span>
+
+logger<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">'debug message'</span><span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'info message'</span><span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">'warning message'</span><span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">'error message'</span><span class="token punctuation">)</span>
+logger<span class="token punctuation">.</span>critical<span class="token punctuation">(</span><span class="token string">'critical message'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="配置logging方式"><a href="#配置logging方式" class="headerlink" title="配置logging方式"></a>配置logging方式</h4><p>作为开发者，我们可以通过以下3中方式来配置logging:</p>
+<ul>
+<li>1）使用Python代码显式的创建loggers, handlers和formatters并分别调用它们的配置函数；</li>
+<li>2）创建一个日志配置文件，然后使用<code>fileConfig()</code>函数来读取该文件的内容；</li>
+<li>3）创建一个包含配置信息的dict，然后把它传递个<code>dictConfig()</code>函数；</li>
+</ul>
+<h4 id="向日志输出添加上下文信息"><a href="#向日志输出添加上下文信息" class="headerlink" title="向日志输出添加上下文信息"></a>向日志输出添加上下文信息</h4><blockquote>
+<p>除了传递给日志记录函数的参数外，有时候我们还想在日志输出中包含一些额外的上下文信息。比如，在一个网络应用中，可能希望在日志中记录客户端的特定信息，如：远程客户端的IP地址和用户名。这里我们来介绍以下几种实现方式：</p>
+<ul>
+<li>通过向日志记录函数传递一个<code>extra</code>参数引入上下文信息</li>
+<li>使用LoggerAdapters引入上下文信息</li>
+<li>使用Filters引入上下文信息</li>
+</ul>
+</blockquote>
+<h5 id="对其他文件中bug等级进行定义"><a href="#对其他文件中bug等级进行定义" class="headerlink" title="对其他文件中bug等级进行定义"></a>对其他文件中bug等级进行定义</h5><blockquote>
+<p>logging.getLogger(“transformers.configuration_utils”).setLevel(logging.WARN)<br>logging.getLogger(“transformers.modeling_utils”).setLevel(logging.WARN)<br>logging.getLogger(‘transformers.tokenization_utils’).setLevel(logging.WARN)</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.python.org/3.5/howto/logging-cookbook.html">logging-cookbook</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">KAKA</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://youblei.github.io/2022/10/18/cs/logging/">https://youblei.github.io/2022/10/18/cs/logging/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">KAKA</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/12/20/dlandml/tf-idf/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="TF_IDF">
+                        
+                        <span class="card-title">TF_IDF</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-12-20
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/DL-ML/" class="post-category">
+                                    DL/ML
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/09/26/cs/matplotlib/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="matplotlib">
+                        
+                        <span class="card-title">matplotlib</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-26
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9B%B8%E5%85%B3/" class="post-category">
+                                    计算机相关
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2023</span>
+            
+            <a href="/about" target="_blank">YouBLEI</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/YouBLEI/" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
