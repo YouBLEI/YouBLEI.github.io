@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Kaka">
-    <meta name="description" content="Kaka">
+    <meta name="keywords" content="后处理之优化结果, Kaka">
+    <meta name="description" content="前言在打一些比赛的时候，会遇到一些对阈值很敏感的评价指标，比如$f1$ ,或者是在一些回归任务中，需要对模型得到结果进一步处理，使结果能相对于处理前能提升一些分数。而这些会往往会涉及到对一些阈值参数的选取，例如，当使用 $f1$ 当做评价指">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Kaka</title>
+    <title>后处理之优化结果 | Kaka</title>
     <link rel="icon" type="image/jpeg" href="/medias/logo.jpg">
     
 
@@ -334,12 +334,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title"></h1>
+                    <h1 class="description center-align post-title">后处理之优化结果</h1>
                 </div>
             </div>
         </div>
@@ -361,12 +361,33 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">机器学习</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%AF%94%E8%B5%9B/">
+                                <span class="chip bg-color">比赛</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%90%8E%E5%A4%84%E7%90%86/">
+                                <span class="chip bg-color">后处理</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%AF%94%E8%B5%9B%E7%9B%B8%E5%85%B3/" class="post-category">
+                                比赛相关
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -375,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-01-13
+                    2023-01-11
                 </div>
                 
 
@@ -399,7 +420,63 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>title: 404<br>date: 2019-08-5 16:41:10<br>type: “404”<br>layout: “404”<br>description: “Oops～，我崩溃了！找不到你想要的页面 :(“</p>
+                <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在打一些比赛的时候，会遇到一些对阈值很敏感的评价指标，比如$f1$ ,或者是在一些回归任务中，需要对模型得到结果进一步处理，使结果能相对于处理前能提升一些分数。而这些会往往会涉及到对一些阈值参数的选取，例如，当使用 $f1$ 当做评价指标的时候往往会因为阈值的选取的不同，划分正负样本的不一样而导致结果往往相差很多</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p><strong>一句话总结，就是将待选取的参数视为未知参数，用优化算法得到使评价指标最 大&#x2F;小 化的参数</strong></p>
+<p>假设一个任务是二分类，我们的模型在验证集 (validation dataset) 上预测了一个结果 $y_{pred}$ , 我们的评价指标为 $G$函数，而我们将模型进行后处理的函数为 $H(y_{pred}, \alpha_1, \alpha_2,…)$, 其中$\alpha_1, \alpha_2,…$是待确定的参数，则最后的由评价函数得到的评价结果 $Result &#x3D; G(H(y_{pred}, \alpha_1, \alpha_2,…), y_{true})$,我们将整体视为一个目标函数，使用优化算法去得到使得结果最好的$\alpha_1, \alpha_2,…$，当我们在验证集计算得到最好的参数，我们则可以将其用于测试集。在这里H函数不一定是一个可导的函数。并且<strong>有一定过拟合风险</strong></p>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><h4 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h4><p>我们的模型预测的结果是连续的数值 $[0, 5]$，但是我们评价指标要求我们最后的结果必须是整数 ${0,1,2,3,4}$,这个时候应该选取怎样的阈值，将哪个区间的划分为1，哪个区间划分为2？ 直觉上可以会将模型得到的结果属于 $[0.5, 1.5]$的数值划分为1，但是由于模型的特殊性，由这个模型得到的这个预测结果使用这个划分区间不是最优解，于是我们可以把这些划分区间的阈值假设为$\alpha_1, \alpha_2,…$， 则$[0, \alpha_1]$ 划分为0，$[\alpha_1, \alpha_2] $划分为1…</p>
+<p>代码:</p>
+<p><strong>定义优化函数</strong></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> partial
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> scipy <span class="token keyword">as</span> sp	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">Result</span><span class="token punctuation">(</span>coef<span class="token punctuation">,</span> y_pred<span class="token punctuation">,</span> y_true<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># coef 就是置信度，也就是 上述的 α集合，该函数定义了我们的评价结果 Results</span>
+
+    <span class="token comment"># --------------- H 函数 -------------------#</span>
+    H <span class="token operator">=</span> np<span class="token punctuation">.</span>copy<span class="token punctuation">(</span>y_pred<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> pred <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>H<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> pred <span class="token operator">&lt;</span> coef<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+            H<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">elif</span> pred <span class="token operator">>=</span> coef<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">and</span> pred <span class="token operator">&lt;</span> coef<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+            H<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token keyword">elif</span> pred <span class="token operator">>=</span> coef<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">and</span> pred <span class="token operator">&lt;</span> coef<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+            H<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">2</span>
+        <span class="token keyword">elif</span> pred <span class="token operator">>=</span> coef<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token keyword">and</span> pred <span class="token operator">&lt;</span> coef<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+            H<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">3</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            H<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">4</span>
+        <span class="token comment"># --------------- H 函数 -------------------#  </span>
+                
+    ll <span class="token operator">=</span> G<span class="token punctuation">(</span>H<span class="token punctuation">,</span> y_true<span class="token punctuation">)</span> <span class="token comment"># 其中G就是我们的评价指标</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span>ll  <span class="token comment"># 如果我们想要取到最大值，我们需要取负变成求最小值，反之不用</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>得到最优参数</strong></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">fit</span><span class="token punctuation">(</span>y_pred<span class="token punctuation">,</span> y_true<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    loss_partial <span class="token operator">=</span> partial<span class="token punctuation">(</span>Result<span class="token punctuation">,</span> y_pred<span class="token operator">=</span>y_pred<span class="token punctuation">,</span> y_true<span class="token operator">=</span>y_true<span class="token punctuation">)</span> <span class="token comment"># Python 内置函数，将参数内置在函数中，方便后续处理</span>
+    initial_coef <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">1.5</span><span class="token punctuation">,</span> <span class="token number">2.5</span><span class="token punctuation">,</span> <span class="token number">3.5</span><span class="token punctuation">]</span> <span class="token comment"># 初始化</span>
+    coef_ <span class="token operator">=</span> sp<span class="token punctuation">.</span>optimize<span class="token punctuation">.</span>minimize<span class="token punctuation">(</span>loss_partial<span class="token punctuation">,</span> initial_coef<span class="token punctuation">,</span> method<span class="token operator">=</span><span class="token string">'nelder-mead'</span><span class="token punctuation">)</span> <span class="token comment"># 优化方法，最后得到就是我们的最优边界</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a>案例2</h4><p>$f1_score$的优化，对于分类模型，往往需要确定一个比较好的阈值来划分不同类别的样本，于是设定不同的阈值就变成了一种艺术，假设我们的模型在验证集上的输出结果  $ y_{pred}$的形状是 $[n,n_classs]$, $n$ 是样本数，$n_class$是 类别数，于是我们可以设置一个权重系数$coff$，形状为 $[1, n_class]$ 初始化为 $[0.5, 0.5,…]$ ,于是我们的$H$ 函数就可以表示为 $H(y_pred, coff) &#x3D;np.argmax(y_{pred}*coff)$</p>
+<p>代码如下:</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">Result</span><span class="token punctuation">(</span>coef<span class="token punctuation">,</span> y_pred<span class="token punctuation">,</span> y_true<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># coef 就是置信度，也就是 上述的 α集合，该函数定义了我们的评价结果 Results</span>
+    
+    <span class="token comment"># --------------- H 函数 -------------------#</span>
+    H <span class="token operator">=</span>np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>y_pred<span class="token operator">*</span>coff<span class="token punctuation">)</span>
+    <span class="token comment"># --------------- H 函数 -------------------#  </span>
+     
+    ll <span class="token operator">=</span> f1_score<span class="token punctuation">(</span>H<span class="token punctuation">,</span> y_true<span class="token punctuation">)</span> <span class="token comment"># 其中G就是我们的评价指标</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span>ll  <span class="token comment"># 如果我们想要取到最大值，我们需要取负变成求最小值，反之不用</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">fit</span><span class="token punctuation">(</span>y_pred<span class="token punctuation">,</span> y_true<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    loss_partial <span class="token operator">=</span> partial<span class="token punctuation">(</span>Result<span class="token punctuation">,</span> y_pred<span class="token operator">=</span>y_pred<span class="token punctuation">,</span> y_true<span class="token operator">=</span>y_true<span class="token punctuation">)</span> <span class="token comment"># Python 内置函数，将参数内置在函数中，方便后续处理</span>
+    initial_coef <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 初始化</span>
+    coef_ <span class="token operator">=</span> sp<span class="token punctuation">.</span>optimize<span class="token punctuation">.</span>minimize<span class="token punctuation">(</span>loss_partial<span class="token punctuation">,</span> initial_coef<span class="token punctuation">,</span> method<span class="token operator">=</span><span class="token string">'nelder-mead'</span><span class="token punctuation">)</span> <span class="token comment"># 优化方法，最后得到就是我们的最优权重</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><ul>
+<li>改方法主要是针对数据进行后处理，在某一些比赛可能取的奇效</li>
+<li>该方法简单实用，并且在后处理过程中 $H$ 函数不一定非要连续或者可导函数</li>
+<li>该方法有一定可能性<strong>导致过拟合</strong>，因为验证集并不能代表测试集，只能在一定程度上有用</li>
+<li>由于该方法依赖传统优化算法，<strong>所以可能存在陷入极小值的局限性</strong>，不过可以多试试不同的优化算法，经过测试，<code>&#39;Nelder-Mead&#39;,&#39;Powell&#39;,&#39;CG&#39;,&#39;BFGS&#39;,&#39;L-BFGS-B&#39;,&#39;TNC&#39;,&#39;COBYLA&#39;,&#39;SLSQP&#39;,&#39;trust-constr&#39;</code> 这些优化算法中<code>Nelder-Mead&#39;,&#39;Powell&#39;,&#39;COBYLA&#39;</code> 在随机数据上能克服陷入极小值的可能性，但是在实际比赛数据中还没有做过具体的测试。</li>
+</ul>
 
                 
             </div>
@@ -416,7 +493,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">YouBLEI</a>
+                    <a href="/about" rel="external nofollow noreferrer">KAKA</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -426,7 +503,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://youblei.github.io/404.html">https://youblei.github.io/404.html</a>
+                    <a href="https://youblei.github.io/2023/01/11/competition/hou-chu-li-zhi-you-hua-jie-guo/">https://youblei.github.io/2023/01/11/competition/hou-chu-li-zhi-you-hua-jie-guo/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -439,7 +516,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">YouBLEI</a>
+                    <a href="/about" target="_blank">KAKA</a>
                     !
                 </span>
             </div>
@@ -463,7 +540,19 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">机器学习</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%AF%94%E8%B5%9B/">
+                                    <span class="chip bg-color">比赛</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%90%8E%E5%A4%84%E7%90%86/">
+                                    <span class="chip bg-color">后处理</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -540,18 +629,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/404.html">
+                <a href="/2023/01/14/cs/hexo-install-record/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Hexo_Install_Record">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">Hexo_Install_Record</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -561,18 +649,33 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-01-13
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-01-14
+                        </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            YouBLEI
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9B%B8%E5%85%B3/" class="post-category">
+                                    计算机相关
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Hexo/">
+                        <span class="chip bg-color">Hexo</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%AE%89%E8%A3%85%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">安装记录</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -583,13 +686,13 @@
                 本篇&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/404.html">
+                <a href="/2023/01/11/competition/hou-chu-li-zhi-you-hua-jie-guo/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="后处理之优化结果">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">后处理之优化结果</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -600,17 +703,37 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-01-13
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-01-11
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            YouBLEI
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%AF%94%E8%B5%9B%E7%9B%B8%E5%85%B3/" class="post-category">
+                                    比赛相关
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">机器学习</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%AF%94%E8%B5%9B/">
+                        <span class="chip bg-color">比赛</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%90%8E%E5%A4%84%E7%90%86/">
+                        <span class="chip bg-color">后处理</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -731,6 +854,13 @@
 
 </main>
 
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
 
 
 
